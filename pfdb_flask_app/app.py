@@ -96,6 +96,10 @@ def edit_team(id):
     # meat and potatoes of our update functionality
     if request.method == "POST":
         # fire off if user clicks the 'Edit Team' button
+        id = request.form["team_id"]
+        team_city = request.form["team_city"]
+        team_name = request.form["team_name"]
+        conference = request.form["conference"]
 
         query = "UPDATE Teams SET Teams.team_city = %s, Teams.team_name = %s, Teams.conference = %s WHERE Teams.team_id = %s"
         cur = mysql.connection.cursor()
