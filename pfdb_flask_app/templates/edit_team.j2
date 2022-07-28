@@ -1,14 +1,14 @@
 <html>
 
 <head>
-	<title>Edit People</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
+	<title>Edit Teams</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
     <div>
         <table border="1" cellpadding="5"> 
-            <caption> Editing User: </caption>
+            <caption> Editing Team: </caption>
             <!-- Access data tuple passed from app.py -->
             {% if data %}
                 <thead>
@@ -38,44 +38,25 @@
         </table>
 
         <div id="edit">
-            <!-- form to edit data in bsg_people-->
-            <form id="editPerson" action="/edit_people/{{data[0].id}}" method="post">
+            <!-- form to edit data in Teams-->
+            <form id="editTeam" action="/edit_team/{{data[0].team_id}}" method="post">
                 <legend><strong>Edit Person</strong></legend>
                 <fieldset>
                     <!-- We can preset form inputs to match attributes currently stored for 'id' of person to be updated via value= and accessing our passed data tuple -->
                     <!-- Create hidden form input to store the passed 'id' of the person we are editing so we can access it easily in our 'POST' method in our app.py -->
-                    <input type="hidden" value="{{data[0].id}}" class="form-control" id="personID" name="personID" required>
-                    <label for="make">first name:</label>
+                    <input type="hidden" value="{{data[0].team_id}}" class="form-control" id="team_id" name="team_id" required>
+                    <label for="make">Team City:</label>
 
-                    <input type="text" value="{{data[0].fname}}" class="form-control" id="fname" name="fname" pattern="[A-Za-z]{1,}" required>
-                    <label for="model">last name:</label>
+                    <input type="text" value="{{data[0].team_city}}" class="form-control" id="team_city" name="team_city" pattern="[A-Za-z]{1,}" required>
+                    <label for="model">Team Name:</label>
 
-                    <input type="text" value="{{data[0].lname}}" class="form-control" id="lname" name="lname" pattern="[A-Za-z0-9]{1,}" required>
-                    <label for="year">homeworld:</label>
-
-
-                    <select class="form-control" id="homeworld" name="homeworld" pattern="[0-4]{1}" placeholder="" required> 
-                        <!-- Access our homeworld tuple passed from app.py-->
-                        <option value="0">&nbsp;</option>
-                        {% for homeworld in homeworlds %}
-                                <!-- If the value iterated homeworld matches the value of the homeworld of person currently Editing, pre-select that option -->
-                                {% if homeworld['id'] == data[0].homeworld %}
-                                    <option value="{{ homeworld['id'] }}" selected> {{homeworld['name']}}</option>
-                                {% else %}
-                                    <option value="{{ homeworld['id'] }}"> {{homeworld['name']}}</option> 
-                                {% endif %}
-
-
-                        <!-- End of this for loop -->
-                        {% endfor %} 
-                    </select>	
-                        
-                    <label for="color">age:</label>
-                    <input type="text" value="{{data[0].age}}" class="form-control" id="age" name="age" pattern="[A-Za-z0-9]{1,}"> 
+                    <input type="text" value="{{data[0].team_name}}" class="form-control" id="team_name" name="team_name" pattern="[A-Za-z0-9]{1,}" required>
+                    <label for="year">Conference:</label>
+                    <input type="text" value="{{data[0].conference}}" class="form-control" id="conference" name="conference" pattern="[A-Za-z0-9]{1,}" required>
                 
                 </fieldset>
-                <input type="submit" value="Edit Person" name="Edit_Person" class="btn btn-primary" style="margin:.5rem;">
-                <a href='/people'><input class="btn" type="button" value="cancel"></a>
+                <input type="submit" value="Edit Team" name="Edit_Team" class="btn btn-primary" style="margin:.5rem;">
+                <a href='/teams'><input class="btn" type="button" value="Cancel"></a>
             </form>
 
 </html>
