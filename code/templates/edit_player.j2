@@ -1,0 +1,77 @@
+<html>
+
+<head>
+	<title>Edit Players</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div>
+        <table border="1" cellpadding="5">
+            <caption> Editing Player: </caption>
+            <!-- Access data tuple passed from app.py -->
+            {% if data %}
+                <thead>
+                    <tr>
+                        <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+
+                        <!-- End of this for loop -->
+                        {% endfor %}
+                    </tr>
+
+                <tbody>
+                    <!-- Now, iterate through every item in data -->
+                    {% for item in data %}
+                    <tr>
+                        <!-- Then iterate through every key in the current item dictionary -->
+                        {% for key in item.keys() %}
+
+                        <!-- Create a <td> element with the value of that key in it -->
+                        <td>{{item[key]}}</td> {% endfor %}
+                    </tr>
+                    {% endfor %}
+            {% endif %}
+        </table>
+        </div>
+        <div id="edit">
+            <!-- form to edit data in Players-->
+            <form id="editPlayer" action="/edit_player/{{data[0].player_id}}" method="post">
+                <legend><strong>Edit Player</strong></legend>
+                <fieldset>
+                    <!-- We can preset form inputs to match attributes currently stored for 'id' of player to be updated via value= and accessing our passed data tuple -->
+                    <!-- Create hidden form input to store the passed 'id' of the player we are editing so we can access it easily in our 'POST' method in our app.py -->
+                    <input type="hidden" value="{{data[0].player_id}}" class="form-control" id="player_id" name="player_id" required>
+
+                    <label for="make">Player First Name:</label>
+                    <input type="text" value="{{data[0].fname}}" class="form-control" id="fname" name="fname" pattern="[A-Za-z ]{1,}" required>
+
+                    <label for="model">Player Last Name:</label>
+                    <input type="text" value="{{data[0].lname}}" class="form-control" id="lname" name="lname" pattern="[A-Za-z0-9 ]{1,}" required>
+
+                    <label for="m">Primary Position:</label>
+                    <input type="text" value="{{data[0].primary_position}}" class="form-control" id="primary_position" name="primary_position" pattern="[A-Za-z0-9 ]{1,}" required>
+
+                    <label for="year">Team:</label>
+                    <select class="form-control" id="team_id" name="team_id" pattern="[A-Za-z0-9 ]{1}" placeholder="{{data[0].team_id}}" value="{{data[0].team_id}}"required>
+                        {% for x in team_data %}
+                            {% if x['team_name']== data[0].team_name %}
+                                <option value="{{ x['team_id']}}" selected> {{ x['team_name'] }}</option>
+                            {% else %}
+                                <option value="{{ x['team_id'] }}"> {{ x['team_name'] }}</option>
+                            {% endif %}
+                        {% endfor %}
+                        <option value="0">&nbsp;</option>
+				    </select>
+
+                </fieldset>
+                <input type="submit" value="Edit Player" name="Edit_Player" class="btn btn-primary" style="margin:.5rem;">
+                <a href='/players'><input class="btn" type="button" value="Cancel"></a>
+            </form>
+        </div>
+        <footer>Pro Football Database | Group 45 | Billy Fifield & Kyle Westover</footer>
+    </body>
+</html>

@@ -1,0 +1,172 @@
+<html>
+<!-- Adapted from the seasons.html UI design -->
+<head>
+	<title>Seasons</title>
+	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * four DIVS: browse, insert, update, delete
+		 * this function sets one visible the others not
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
+	function newSeason() {
+		showform('insert');
+	}
+	function updateSeason(pid) {
+		showform('update');
+	}
+	function deleteSeason(pid) {
+		showform('delete');
+	}
+	function browseSeasons() {
+		showform('browse');
+	}
+	function showAll() {
+		showform('all');
+	}
+	</script>
+</head>
+
+<body onload="browseSeasons()">
+	<nav>
+	<div class="pfdbTitle">Pro Football Database</div>
+	<div class="nav-links">
+	<ul>
+		<li><a href="/">HOME</a></li>
+		<li><a href="/teams">TEAMS</a></li>
+		<li><a href="/players">PLAYERS</a></li>
+		<li><a href="/games">GAMES</a></li>
+		<li><a href="/player_game">PLAYER GAME STATS</a></li>
+		<li><a href="#">SEASONS</a></li>
+	</ul>
+	</div>
+    </nav>
+	<div id="browse">
+		<legend id="teamTitle"><strong>Seasons</strong></legend>
+		<form id="insertSeason" action="/seasons" method="post">
+			<legend><strong>Add Seasons</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="make">Season Year:</label>
+				<input type="text" class="form-control" id="season_year" name="season_year" pattern="[0-9]{1,}" placeholder="" required>
+
+				<label for="model">Super Bowl Winner:</label>
+				{% if teams %}
+				<select class="form-control" id="super_bowl_champ" name="super_bowl_champ" pattern="[A-Za-z0-9 ]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="">&nbsp;</option>
+					{% for x in teams %}
+					<option value="{{x.team_id}}">{{x.team_name}}</option>
+					{% endfor %}
+				</select>
+				{% endif %} 
+
+				<label for="year">Super Bowl Runner Up:</label>
+				{% if teams %}
+				<select class="form-control" id="super_bowl_runner_up" name="super_bowl_runner_up" pattern="[A-Za-z0-9 ]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="">&nbsp;</option>
+					{% for x in teams %}
+					<option value="{{x.team_id}}">{{x.team_name}}</option>
+					{% endfor %}
+				</select>
+				{% endif %} 
+            <!-- Create 'Add Season' and 'Cancel' buttons -->
+			<input type="submit" value="Add Season" name="Add_Season" class="btn btn-primary" style="margin:.5rem;">
+			</fieldset>
+		</form>
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+						    <td><a href="edit_season/{{item.season_year}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_season/{{item.season_year}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+	<div id="edit">
+		<!-- form to edit data in Seasons-->
+		<form id="editSeason" action="/edit_season/{{data[0].season_year}}" method="post">
+			<legend><strong>Edit Season</strong></legend>
+			<fieldset>
+				<label for="make">Season Year:</label>
+
+				<input type="text" class="form-control" id="season_year" name="season_year" pattern="[A-Za-z]{1,}" placeholder="{{data[0].season_year}}" required>
+				<label for="model">Super Bowl Winner:</label>
+
+				{% if teams %}
+				<select class="form-control" id="super_bowl_champ" name="super_bowl_champ" pattern="[A-Za-z0-9 ]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="none" selected>&nbsp;</option>
+					{% for x in teams %}
+					<option value="{{x.team_id}}">{{x.team_name}}</option>
+					{% endfor %}
+				</select>
+				{% endif %} 
+				<label for="year">Super Bowl Runner Up:</label>
+				{% if teams %}
+				<select class="form-control" id="super_bowl_runner_up" name="super_bowl_runner_up" pattern="[A-Za-z0-9 ]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="none" selected>&nbsp;</option>
+					{% for x in teams %}
+					<option value="{{x.team_id}}">{{x.team_name}}</option>
+					{% endfor %}
+				</select>
+				{% endif %} 
+
+				</fieldset>
+				<input class="btn" type="button" value="Cancel" onClick="browseSeasons()" style="margin:.5rem;"> 
+        </form>
+	</div><!--edit-->
+	<footer>Pro Football Database | Group 45 | Billy Fifield & Kyle Westover</footer>
+</body>
+</html>

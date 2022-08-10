@@ -1,0 +1,101 @@
+<html>
+
+<head>
+	<title>Edit Player Game Stats</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div>
+        <table border="1" cellpadding="5"> 
+            <caption> Editing Player Game: </caption>
+            <!-- Access data tuple passed from app.py -->
+            {% if data %}
+                <thead>
+                    <tr>
+                        <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                        
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+                <tbody>
+                    <!-- Now, iterate through every item in data -->
+                    {% for item in data %}
+                    <tr>
+                        <!-- Then iterate through every key in the current item dictionary -->
+                        {% for key in item.keys() %}
+                        
+                        <!-- Create a <td> element with the value of that key in it -->
+                        <td>{{item[key]}}</td> {% endfor %} 
+                    </tr> 
+                    {% endfor %} 
+            {% endif %} 
+        </table>
+        </div>
+        <div id="edit">
+            <br>
+            <!-- form to edit data in Player_Games_Stats-->
+            <form id="editPlayerGame" action="/edit_player_game/{{data[0].player_stats_id}}" method="post">
+                <legend><strong>Edit Player Game</strong></legend>
+                <fieldset>
+                    <!-- We can preset form inputs to match attributes currently stored for 'id' of person to be updated via value= and accessing our passed data tuple -->
+                    <!-- Create hidden form input to store the passed 'id' of the person we are editing so we can access it easily in our 'POST' method in our app.py -->
+                    <input type="hidden" value="{{data[0].player_stats_id}}" class="form-control" id="player_stats_id" name="player_stats_id" required>
+                    
+                    <label for="make">Player:</label>
+                    {% if player_data %}
+                    <select class="form-control" id="player_id" name="player_id" pattern="[0-9]{1,}" value="{{data[0].name}}"required>
+                    {% for x in player_data %}
+                        {% if x['player_id'] == data[0].player_id %}
+                            <option value="{{ x['player_id'] }}" selected>{{ x['name'] }}</option>
+                        {% else %}
+                            <option value="{{ x['player_id' ]}}">{{ x['name'] }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </select>
+                    {% endif %}
+
+                    <label for="model">Game:</label>
+                    {% if game_data %}
+                    <select class="form-control" id="game_id" name="game_id" pattern="[0-9]{1,}" required>
+                    {% for x in game_data %}
+                        {% if x['game_id'] == data[0].game_id %}
+                            <option value="{{x['game_id']}}" selected>{{x['game_id']}}</option>
+                        {% else %}
+                            <option value="{{x['game_id']}}">{{x['game_id']}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </select>
+                    {% endif %}
+
+                    <label for="year">Passing Yards:</label>
+                    <input type="text" value="{{data[0].passing_yard_total}}" class="form-control" id="passing_yard_total" name="passing_yard_total" pattern="[0-9]{1,}" required>
+
+                    <label for="a">Passing TDs:</label>
+                    <input type="text" value="{{data[0].passing_td_total}}" class="form-control" id="passing_td_total" name="passing_td_total" pattern="[0-9]{1,}" required>
+
+                    <label for="b">Rushing Yards:</label>
+                    <input type="text" value="{{data[0].rushing_yard_total}}" class="form-control" id="rushing_yard_total" name="rushing_yard_total" pattern="[0-9]{1,}" required>
+
+                    <label for="c">Rushing TDs:</label>
+                    <input type="text" value="{{data[0].rushing_td_total}}" class="form-control" id="rushing_td_total" name="rushing_td_total" pattern="[0-9]{1,}" required>
+
+                    <label for="d">Receiving Yards:</label>
+                    <input type="text" value="{{data[0].receiving_yard_total}}" class="form-control" id="receiving_yard_total" name="receiving_yard_total" pattern="[0-9]{1,}" required>
+                    <br>
+                    <label for="e">Receiving TDs:</label>
+                    <input type="text" value="{{data[0].receiving_td_total}}" class="form-control" id="receiving_td_total" name="receiving_td_total" pattern="[0-9]{1,}" required>
+                    <input type="submit" value="Edit Player Game Stats" name="Edit_Player_Game" class="btn btn-primary" style="margin:.5rem;">
+                    <a href='/player_game'><input class="btn" type="button" value="Cancel"></a>
+                </fieldset>
+            </form>
+
+        </div>
+    	<footer>Pro Football Database | Group 45 | Billy Fifield & Kyle Westover</footer>
+    </body>
+</html>

@@ -1,0 +1,104 @@
+<html>
+<head>
+<title>Game</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript">
+</script>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-links">
+        <ul>
+            <li><a href="/">HOME</a></li>
+            <li><a href="/teams">TEAMS</a></li>
+            <li><a href="{{ url_for('static', filename='players.html') }}">PLAYERS</a></li>
+            <li><a href="{{ url_for('static', filename='games.html') }}">GAMES</a></li>
+            <li><a href="{{ url_for('static', filename='player_game.html') }}">PLAYER GAME STATS</a></li>
+            <li><a href="{{ url_for('static', filename='seasons.html') }}">SEASONS</a></li>
+        </ul>
+        </div>
+    </nav>
+    <div id="teamGameStats" class="container">
+        <legend id="gameTitle"><strong>Team Game Stats</strong></legend>
+        <p>A table that includes game states for two teams. The team names are linked to each team's Team ID.</p>
+        <form action="/form/submit">
+            <input type="text" name="text" class="search" placeholder="Search">
+            <input type="submit" name="submit" class="submit" value="Search">
+        </form>
+        <table border="1" cellpadding="5">
+            <tr>
+            <th>Game ID</th>
+            <th>Home Team</th>
+            <th>Away Team</th>
+            <th>Home Score</th>
+            <th>Away Score</th>
+            <th>Date</th>
+            <th>Season Year</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Broncos</td>
+                <td>Titans</td>
+                <td>24</td>
+                <td>10</td>
+                <td>2015/02/05</td>
+                <td>2015</td>
+                <td><a href="#" onClick="location.href='./update_games.html'">Edit</a></td>
+                <td><a href="#" onClick="location.href='./delete_games.html'">Delete</a></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Lions</td>
+                <td>Titans</td>
+                <td>35</td>
+                <td>10</td>
+                <td>2023/02/06</td>
+                <td>2023</td>
+                <td><a href="#" onClick="location.href='./update_games.html'">Edit</a></td>
+                <td><a href="#" onClick="location.href='./delete_games.html'">Delete</a></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Titans</td>
+                <td>Steelers</td>
+                <td>2</td>
+                <td>53</td>
+                <td>2022/10/15</td>
+                <td>2022</td>
+                <td><a href="#" onClick="location.href='./update_games.html'">Edit</a></td>
+                <td><a href="#" onClick="location.href='./delete_games.html'">Delete</a></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><select>
+                    <option value=""></option>
+                    <option value="1">Broncos</option>
+                    <option value="2">Titans</option>
+                    <option value="3">Steelers</option>
+                    <option value="4">Lions</option>
+                    <option value="5">Eagles</option>
+                </select></td>
+                <td><select>
+                    <option value=""></option>
+                    <option value="1">Broncos</option>
+                    <option value="2">Titans</option>
+                    <option value="3">Steelers</option>
+                    <option value="4">Lions</option>
+                    <option value="5">Eagles</option>
+                </select></td>
+                <td><input></td>
+                <td><input></td>
+                <td><input value="YYYY/MM/DD"></td>
+                <td><input value="YYYY"></td>
+                <td><input type="submit" value="Add Game"><a href="#"></a></input></td>
+            </tr>    
+        </table>
+        <br>
+        <br>
+        <hr>
+        
+    </div>
+    <footer>Pro Football Database | Group 45 | Billy Fifield & Kyle Westover</footer>
+</body>
+</html>

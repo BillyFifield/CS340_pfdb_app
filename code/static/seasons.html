@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>Game</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript">
+</script>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-links">
+        <ul>
+            <li><a href="/">HOME</a></li>
+            <li><a href="/teams">TEAMS</a></li>
+            <li><a href="{{ url_for('static', filename='players.html') }}">PLAYERS</a></li>
+            <li><a href="{{ url_for('static', filename='games.html') }}">GAMES</a></li>
+            <li><a href="{{ url_for('static', filename='player_game.html') }}">PLAYER GAME STATS</a></li>
+            <li><a href="#">SEASONS</a></li>
+        </ul>
+        </div>
+    </nav>
+    <div id="season" class="container">
+        <legend id="seasonTitle"><strong>Seasons</strong></legend>
+        <p>A table to view and add season information including the Super Bowl winner and runner up.</p>
+        <table border="1" cellpadding="5">
+            <tr>
+            <th>Season Year</th>
+            <th>Super Bowl Champ</th>
+            <th>Super Bowl Runner Up</th>
+            </tr>
+            <tr>
+                <td>2015</td>
+                <td>Broncos</td>
+                <td>Eagles</td>
+                <td><a href="#" onClick="location.href='./update_season.html'">Edit</a></td>
+                <td><a href="#" onClick="location.href='./delete_season.html'">Delete</a></td>
+            </tr>
+            <tr>
+                <td>2022</td>
+                <td>Steelers</td>
+                <td>Lions</td>
+                <td><a href="#" onClick="location.href='./update_season.html'">Edit</a></td>
+                <td><a href="#" onClick="location.href='./delete_season.html'">Delete</a></td>
+            </tr>
+            <tr>
+                <td>2023</td>
+                <td>Lions</td>
+                <td>Titans</td>
+                <td><a href="#" onClick="location.href='./update_season.html'">Edit</a></td>
+                <td><a href="#" onClick="location.href='./delete_season.html'">Delete</a></td>
+            </tr>
+            <tr>
+                <td><input></td>
+                <td><select>
+                    <option value=""></option>
+                    <option value="1">Broncos</option>
+                    <option value="2">Titans</option>
+                    <option value="3">Steelers</option>
+                    <option value="4">Lions</option>
+                    <option value="5">Eagles</option>
+                </select></td>
+                <td><select>
+                    <option value=""></option>
+                    <option value="1">Broncos</option>
+                    <option value="2">Titans</option>
+                    <option value="3">Steelers</option>
+                    <option value="4">Lions</option>
+                    <option value="5">Eagles</option>
+                </select></td>
+                <td><input type="submit" value="Add Season"><a href="#"></a></input></td>
+            </tr>    
+        </table>        
+    </div>
+    <footer>Pro Football Database | Group 45 | Billy Fifield & Kyle Westover</footer>
+</body>
+</html>

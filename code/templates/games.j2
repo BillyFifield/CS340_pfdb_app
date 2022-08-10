@@ -1,0 +1,173 @@
+<html>
+<!-- Adapted from the games.html UI design -->
+<head>
+	<title>Games</title>
+	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * four DIVS: browse, insert, update, delete
+		 * this function sets one visible the others not
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
+	function newGame() {
+		showform('insert');
+	}
+	function updateGame(pid) {
+		showform('update');
+	}
+	function deleteGame(pid) {
+		showform('delete');
+	}
+	function browseGames() {
+		showform('browse');
+	}
+	function showAll() {
+		showform('all');
+	}
+	</script>
+</head>
+
+<body onload="browseGames()">
+	<nav>
+	<div class="pfdbTitle">Pro Football Database</div>
+	<div class="nav-links">
+	<ul>
+		<li><a href="/">HOME</a></li>
+		<li><a href="/teams">TEAMS</a></li>
+		<li><a href="/players">PLAYERS</a></li>
+		<li><a href="#">GAMES</a></li>
+		<li><a href="/player_game">PLAYER GAME STATS</a></li>
+		<li><a href="/seasons">SEASONS</a></li>
+	</ul>
+	</div>
+    </nav>
+	<div id="browse">
+		<legend id="teamTitle"><strong>Games</strong></legend>
+		<div id="insert">
+		<!-- form to INSERT new data into Games-->
+			<form action="/search_season_games/{{data[0].season_year}}">
+				<fieldset>
+				<label>Search Games by Season:</label>
+				<select class="form-control" id="season_year" name="season_year" pattern="[0-9]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="">&nbsp;</option>
+					{% for season in seasons %}
+					<option value="{{ season['season_year'] }}">{{ season['season_year'] }}</option>
+					{% endfor %}
+				</select>
+				<input type="submit" value="Search Season" name="Search_Seasons" class="btn btn-primary" style="margin:.5rem;">
+				</fieldset>
+			</form>
+		<form id="insertGame" action="/games" method="post">
+			<legend><strong>Add Game</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="home">Home Team:</label>
+                {% if teams %}
+				<select class="form-control" id="home_team_id" name="home_team_id" pattern="[A-Za-z0-9 ]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="">&nbsp;</option>
+					{% for x in teams %}
+					<option value="{{x.team_id}}">{{x.team_name}}</option>
+					{% endfor %}
+				</select>
+				{% endif %} 
+
+				<label for="away">Away Team:</label>
+                {% if teams %}
+				<select class="form-control" id="away_team_id" name="away_team_id" pattern="[A-Za-z0-9 ]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="">&nbsp;</option>
+					{% for x in teams %}
+					<option value="{{x.team_id}}">{{x.team_name}}</option>
+					{% endfor %}
+				</select>
+				{% endif %} 
+				<label for="homeScore">Home Score</label>
+                <input type="number" class="form-control" id="home_score" name="home_score" pattern="[0-9]{1,}" placeholder="" required>
+                <label for="awayScore">Away Score</label>
+                <input type="number" class="form-control" id="away_score" name="away_score" pattern="[0-9]{1,}" placeholder="" required>
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" placeholder="" required>
+                <label for="season">Season</label>
+                {% if seasons %}
+				<select class="form-control" id="season_year" name="season_year" pattern="[0-9]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="">&nbsp;</option>
+					{% for x in seasons %}
+					<option value="{{x.season_year}}">{{x.season_year}}</option>
+					{% endfor %}
+				</select>
+				{% endif %} 
+				<input type="submit" value="Add Game" name="Add_Game" class="btn btn-primary" style="margin:.5rem;">
+
+            </fieldset>
+        </form>
+	<br>
+	</div><!--insert-->
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+						    <td><a href="edit_game/{{item.game_id}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_game/{{item.game_id}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<footer>Pro Football Database | Group 45 | Billy Fifield & Kyle Westover</footer>
+</body>
+</html>

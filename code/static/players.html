@@ -1,0 +1,83 @@
+
+<head>
+    <title>Players</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript">
+    </script>
+    </head>
+    
+    <body>
+        <nav>
+            <div class="nav-links">
+            <ul>
+                <li><a href="/">HOME</a></li>
+                <li><a href="/teams">TEAMS</a></li>
+                <li><a href="#">PLAYERS</a></li>
+                <li><a href="{{ url_for('static', filename='games.html') }}">GAMES</a></li>
+                <li><a href="{{ url_for('static', filename='player_game.html') }}">PLAYER GAME STATS</a></li>
+                <li><a href="{{ url_for('static', filename='seasons.html') }}">SEASONS</a></li>
+            </ul>
+            </div>
+        </nav>
+        <div id="players" class="container">
+            <legend id="playerTitle"><strong>Players</strong></legend>
+            <p>A table to add and view player information.</p>
+            <table border="1" cellpadding="5">
+                <tr>
+                <th>Player ID</th>
+                <th>Player First Name</th>
+                <th>Player Last Name</th>
+                <th>Team</th>
+                <th>Primary Position</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Russell</td>
+                    <td>Wilson</td>
+                    <td>Broncos</td>
+                    <td>QB</td>
+                    <td><a href="#" onClick="location.href='./update_players.html'">Edit</a></td>
+                    <td><a href="#" onClick="location.href='./delete_players.html'">Delete</a></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Najee</td>
+                    <td>Harris</td>
+                    <td>Steelers</td>
+                    <td>RB</td>
+                    <td><a href="#" onClick="location.href='./update_players.html'">Edit</a></td>
+                    <td><a href="#" onClick="location.href='./delete_players.html'">Delete</a></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Derrick</td>
+                    <td>Henry</td>
+                    <td>Titans</td>
+                    <td>RB</td>
+                    <td><a href="#" onClick="location.href='./update_players.html'">Edit</a></td>
+                    <td><a href="#" onClick="location.href='./delete_players.html'">Delete</a></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><input value=""></td>
+                    <td><input value=""></td>
+                    <td><select>
+                        <option value="1"></option>
+                        <option value="1">Broncos</option>
+                        <option value="2">Titans</option>
+                        <option value="3">Steelers</option>
+                        <option value="4">Lions</option>
+                        <option value="5">Eagles</option>
+                    </select></td>
+                    <td><input value=""></td>                
+                    <td><input type="submit" value="Add Player"><a href="#"></a></input></td>
+                </tr>    
+            </table>
+            <br>
+            <br>
+            <hr>
+            
+        </div>
+        <footer>Pro Football Database | Group 45 | Billy Fifield & Kyle Westover</footer>
+    </body>
+    </html>

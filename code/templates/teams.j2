@@ -1,0 +1,135 @@
+<html>
+<!-- Adapted from the teams.html UI design -->
+<head>
+	<title>Teams</title>
+	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * four DIVS: browse, insert, update, delete
+		 * this function sets one visible the others not
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
+	function newTeam() {
+		showform('insert');
+	}
+	function updateTeam(pid) {
+		showform('update');
+	}
+	function deleteTeam(pid) {
+		showform('delete');
+	}
+	function browseTeams() {
+		showform('browse');
+	}
+	function showAll() {
+		showform('all');
+	}
+	</script>
+</head>
+
+<body onload="browseTeams()">
+	<nav>
+	<div class="pfdbTitle">Pro Football Database</div>
+	<div class="nav-links">
+	<ul>
+		<li><a href="/">HOME</a></li>
+		<li><a href="#">TEAMS</a></li>
+		<li><a href="/players">PLAYERS</a></li>
+		<li><a href="/games">GAMES</a></li>
+		<li><a href="/player_game">PLAYER GAME STATS</a></li>
+		<li><a href="/seasons">SEASONS</a></li>
+	</ul>
+	</div>
+    </nav>
+	<div id="browse">
+		<legend id="teamTitle"><strong>Teams</strong></legend>
+		<div id="insert">
+		<!-- form to INSERT new data into Teams-->
+		<form id="insertTeam" action="/teams" method="post">
+			<legend><strong>Add Team</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="make">Team City:</label>
+				<input type="text" class="form-control" id="team_city" name="team_city" pattern="[A-Za-z ]{1,}" placeholder="" required>
+
+				<label for="model">Team Name:</label>
+				<input type="text" class="form-control" id="team_name" name="team_name" pattern="[A-Za-z0-9 ]{1,}" placeholder="" required>
+
+				<label for="year">Conference:</label>
+				<select class="form-control" id="conference" name="conference" pattern="[A-Za-z0-9]{1}" placeholder="" required>
+				<!-- these are hard coded, but you can add code to make this dynamic -->
+					<option value="0">&nbsp;</option>
+					<option value="NFC">NFC</option>
+					<option value="AFC">AFC</option>
+				</select>
+				<input type="submit" value="Add Team" name="Add_Team" class="btn btn-primary" style="margin:.5rem;">
+
+            </fieldset>
+        </form>
+	<br>
+	</div><!--insert-->
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+						    <td><a href="edit_team/{{item.team_id}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_team/{{item.team_id}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+	<footer>Pro Football Database | Group 45 | Billy Fifield & Kyle Westover</footer>
+</body>
+</html>
